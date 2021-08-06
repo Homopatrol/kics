@@ -44,13 +44,11 @@ import (
 var (
 	//go:embed assets/kics-console
 	banner string
-	disableCISDescriptions bool
 )
 
 const (
 	scanCommandStr = "scan"
 	initError      = "initialization error - "
-	disableCISDescFlag      = "disable-cis-descriptions"
 )
 
 // NewScanCmd creates a new instance of the scan Command
@@ -252,152 +250,10 @@ func setBoundFlags(flagName string, val interface{}, cmd *cobra.Command) {
 	}
 }
 
-<<<<<<< HEAD
 func initScanCmd(scanCmd *cobra.Command) error {
 	if err := initJSONFlags(scanCmd); err != nil {
 		return err
 	}
-=======
-func initScanFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().StringVar(&cfgFile,
-		configFlag, "",
-		"path to configuration file")
-	scanCmd.Flags().IntVar(&queryExecTimeout,
-		queryExecTimeoutFlag,
-		defaultQueryExecTimeout,
-		"number of seconds the query has to execute before being canceled")
-	scanCmd.Flags().StringVar(&inputData,
-		inputDataFlag,
-		"",
-		"path to query input data files")
-	scanCmd.Flags().BoolVar(&disableCISDescriptions,
-		disableCISDescFlag,
-		false,
-		"disable request for CIS descriptions and use default vulnerability descriptions")
-	initPathsFlags(scanCmd)
-	initStdoutFlags(scanCmd)
-	initOutputFlags(scanCmd)
-	initInclusionFlags(scanCmd)
-	initExitStatusFlags(scanCmd)
-}
-
-func initOutputFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().StringVar(&outputName,
-		outputNameFlag,
-		"results",
-		"name used on report creations")
-	scanCmd.Flags().StringVarP(&outputPath,
-		outputPathFlag,
-		outputPathShorthand,
-		"",
-		"directory path to store reports")
-	scanCmd.Flags().StringSliceVar(&reportFormats, reportFormatsFlag, []string{"json"},
-		"formats in which the results will be exported (all, json, sarif, html, glsast, pdf)",
-	)
-
-	scanCmd.Flags().StringSliceVarP(&types,
-		typeFlag, typeShorthand,
-		[]string{""},
-		"case insensitive list of platform types to scan\n"+
-			fmt.Sprintf("(%s)", strings.Join(source.ListSupportedPlatforms(), ", ")))
-
-	scanCmd.Flags().StringSliceVar(&cloudProviders,
-		cloudProviderFlag,
-		[]string{""},
-		"list of cloud providers to scan "+
-			fmt.Sprintf("(%s)", strings.Join(source.ListSupportedCloudProviders(), ", ")))
-}
-
-func initStdoutFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().IntVar(&previewLines,
-		previewLinesFlag,
-		defaultPreviewLines,
-		"number of lines to be display in CLI results (min: 1, max: 30)")
-	scanCmd.Flags().StringVarP(&payloadPath,
-		payloadPathFlag, payloadPathShorthand,
-		"",
-		"path to store internal representation JSON file")
-	scanCmd.Flags().BoolVar(&min,
-		minimalUIFlag,
-		false,
-		"simplified version of CLI output")
-	scanCmd.Flags().BoolVar(&noProgress,
-		noProgressFlag,
-		false,
-		"hides the progress bar")
-}
-
-func initPathsFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().StringSliceVarP(&path,
-		pathFlag, pathFlagShorthand,
-		[]string{},
-		"paths or directories to scan\nexample: \"./somepath,somefile.txt\"")
-	scanCmd.Flags().StringSliceVarP(&excludePath,
-		excludePathsFlag, excludePathsShorthand,
-		[]string{},
-		"exclude paths from scan\nsupports glob and can be provided multiple times or as a quoted comma separated string"+
-			"\nexample: './shouldNotScan/*,somefile.txt'",
-	)
-	scanCmd.Flags().StringVarP(&queryPath,
-		queriesPathCmdName, queriesPathShorthand,
-		"./assets/queries",
-		"path to directory with queries",
-	)
-}
-
-func initInclusionFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().StringSliceVar(&excludeIDs,
-		excludeQueriesFlag,
-		[]string{},
-		"exclude queries by providing the query ID\n"+"cannot be provided with query inclusion flags\n"+
-			msg+
-			"example: 'e69890e6-fce5-461d-98ad-cb98318dfc96,4728cd65-a20c-49da-8b31-9c08b423e4db'",
-	)
-	scanCmd.Flags().StringSliceVarP(&includeIDs,
-		includeQueriesFlag,
-		inlcudeQueriesShorthand,
-		[]string{},
-		"include queries by providing the query ID\n"+"cannot be provided with query exclusion flags\n"+
-			msg+
-			"example: 'e69890e6-fce5-461d-98ad-cb98318dfc96,4728cd65-a20c-49da-8b31-9c08b423e4db'",
-	)
-	scanCmd.Flags().StringSliceVarP(&excludeResults,
-		excludeResultsFlag,
-		excludeResutlsShorthand,
-		[]string{},
-		"exclude results by providing the similarity ID of a result\n"+
-			msg+
-			"example: 'fec62a97d569662093dbb9739360942f...,31263s5696620s93dbb973d9360942fc2a...'",
-	)
-	scanCmd.Flags().StringSliceVar(&excludeCategories,
-		excludeCategoriesFlag,
-		[]string{},
-		"exclude categories by providing its name\n"+
-			"cannot be provided with query inclusion flags\n"+
-			msg+
-			"example: 'Access control,Best practices'",
-	)
-}
-
-func initExitStatusFlags(scanCmd *cobra.Command) {
-	scanCmd.Flags().StringSliceVar(&failOn,
-		failOnFlag,
-		[]string{"high", "medium", "low", "info"},
-		"which kind of results should return an exit code different from 0\n"+
-			"accetps: high, medium, low and info\n"+
-			"example: \"high,low\"",
-	)
-	scanCmd.Flags().StringVar(&ignoreOnExit,
-		ignoreOnExitFlag,
-		"none",
-		"defines which kind of non-zero exits code should be ignored\n"+"accepts: all, results, errors, none\n"+
-			"example: if 'results' is set, only engine errors will make KICS exit code different from 0",
-	)
-}
-
-func initScanCmd(scanCmd *cobra.Command) {
-	initScanFlags(scanCmd)
->>>>>>> master
 
 	if err := scanCmd.MarkFlagRequired(pathFlag); err != nil {
 		sentry.CaptureException(err)
@@ -682,7 +538,7 @@ func getSummary(t *tracker.CITracker, results []model.Vulnerability, start, end 
 	}
 	summary.ScannedPaths = pathParameters.ScannedPaths
 
-	if disableCISDescriptions {
+	if getBoolFlag(disableCISDescFlag) {
 		log.Warn().Msg("Skipping CIS descriptions because provided disable flag is set")
 	} else {
 		err := descriptions.RequestAndOverrideDescriptions(&summary)
@@ -717,12 +573,7 @@ func resolveOutputs(
 		}
 	}
 
-	return printOutput(
-		getStrFlag(outputPathFlag),
-		getStrFlag(outputNameFlag),
-		summary, getMultiStrFlag(reportFormatsFlag),
-		proBarBuilder,
-	)
+	return printOutput(getStrFlag(outputPathFlag), getStrFlag(outputNameFlag), summary, getMultiStrFlag(reportFormatsFlag), proBarBuilder)
 }
 
 func printOutput(outputPath, filename string, body interface{}, formats []string, proBarBuilder progress.PbBuilder) error {

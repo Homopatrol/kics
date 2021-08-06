@@ -25,6 +25,7 @@ var (
 const (
 	cloudProviderFlag     = "cloud-provider"
 	configFlag            = "config"
+	disableCISDescFlag    = "disable-cis-descriptions"
 	excludeCategoriesFlag = "exclude-categories"
 	excludePathsFlag      = "exclude-paths"
 	excludeQueriesFlag    = "exclude-queries"

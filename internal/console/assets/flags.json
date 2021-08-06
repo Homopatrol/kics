@@ -11,6 +11,12 @@
     "defaultValue": "",
     "usage": "path to configuration file"
   },
+  "disable-cis-descriptions": {
+    "flagType": "bool",
+    "shorthandFlag": "",
+    "defaultValue": "false",
+    "usage": "disable request for CIS descriptions and use default vulnerability descriptions"
+  },
   "exclude-categories": {
     "flagType": "multiStr",
     "shorthandFlag": "",
