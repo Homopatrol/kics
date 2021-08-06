@@ -99,10 +99,7 @@ func initialize(rootCmd *cobra.Command) error {
 		return err
 	}
 
-	if err := initScanCmd(scanCmd); err != nil {
-		return err
-	}
-	return nil
+	return initScanCmd(scanCmd)
 }
 
 // Execute starts kics execution
