@@ -70,13 +70,14 @@ var (
 
 	// TODO uncomment this test once all metadata are fixed
 	availablePlatforms = map[string]string{
-		"Ansible":        "ansible",
-		"CloudFormation": "cloudFormation",
-		"Common":         "common",
-		"Dockerfile":     "dockerfile",
-		"Kubernetes":     "k8s",
-		"OpenAPI":        "openAPI",
-		"Terraform":      "terraform",
+		"Ansible":              "ansible",
+		"CloudFormation":       "cloudFormation",
+		"Common":               "common",
+		"Dockerfile":           "dockerfile",
+		"Kubernetes":           "k8s",
+		"OpenAPI":              "openAPI",
+		"Terraform":            "terraform",
+		"AzureResourceManager": "azureResourceManager",
 	}
 	platformKeys = MapToStringSlice(availablePlatforms)
 
@@ -108,6 +109,10 @@ var (
 		"descriptionText": func(tb testing.TB, value interface{}, metadataPath string) {
 			descriptionValue := testMetadataFieldStringType(tb, value, "descriptionText", metadataPath)
 			require.NotEmpty(tb, descriptionValue, "empty description text in query metadata file %s", metadataPath)
+		},
+		"descriptionID": func(tb testing.TB, value interface{}, metadataPath string) {
+			descriptionIDValue := testMetadataFieldStringType(tb, value, "descriptionID", metadataPath)
+			require.NotEmpty(tb, descriptionIDValue, "empty description ID in query metadata file %s", metadataPath)
 		},
 		"platform": func(tb testing.TB, value interface{}, metadataPath string) {
 			platformValue := testMetadataFieldStringType(tb, value, "platform", metadataPath)
@@ -252,7 +257,7 @@ func testQueryHasGoodReturnParams(t *testing.T, entry queryEntry) {
 	wg := &sync.WaitGroup{}
 	currentQuery := make(chan int64)
 	proBarBuilder := progress.InitializePbBuilder(true, true, true)
-	platforms := []string{"Ansible", "CloudFormation", "Kubernetes", "OpenAPI", "Terraform", "Dockerfile"}
+	platforms := []string{"Ansible", "CloudFormation", "Kubernetes", "OpenAPI", "Terraform", "Dockerfile", "AzureResourceManager"}
 	progressBar := proBarBuilder.BuildCounter("Executing queries: ", inspector.LenQueriesByPlat(platforms), wg, currentQuery)
 	go progressBar.Start()
 
