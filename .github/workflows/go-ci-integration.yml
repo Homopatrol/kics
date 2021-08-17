@@ -55,9 +55,9 @@ jobs:
             --disable-cis-descriptions \
             --ignore-on-exit "results" \
             --log-level DEBUG \
-            --log-path "/path/info.log" \
+            --log-path "/assets/queries/info.log" \
             -p "/path" \
-            -o "/path/"
+            -o "/assets/queries/"
       - name: Archive test logs
         uses: actions/upload-artifact@v2
         if: always()
