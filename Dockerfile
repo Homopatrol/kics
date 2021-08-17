@@ -3,7 +3,9 @@ FROM golang:1.16-alpine as build_env
 ARG UID=1000
 ARG GID=1000
 
-RUN addgroup -S -g ${GID} Checkmarx && adduser -S -D -u ${UID} Checkmarx -G Checkmarx
+RUN addgroup -S -g ${GID} Checkmarx && \
+    adduser -S -D -u ${UID} Checkmarx -G Checkmarx
+    
 USER ${UID}
 # Copy the source from the current directory to the Working Directory inside the container
 WORKDIR /app
